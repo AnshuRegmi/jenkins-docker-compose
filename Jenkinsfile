@@ -1,32 +1,31 @@
 pipeline {
-	agent any
-	stages {
-		stage("verifying tooling") {
-			steps {
-				sh '''
-					docker version
-					docker info
-					docker compose version
-					curl --version
-					jq --version
-				'''
-			}
-		}
-		stage("Prune Docker Data") {
-			steps {
-				sh 'docker system prune -a --volumes -f'
-			}
-		}
-		stage("Start Container") {
-			steps {
-				sh 'docker compose up -d --no-color --wait'
-				sh 'docker compose ps'
-			}
-		}
-		stage("Check Response") {
-			steps {
-				sh 'curl http://localhost'
-			}
-		}
-	}
+    agent any
+    stages {
+        stage("verifying tooling") {
+            steps {
+                bat '''
+                    docker version
+                    docker info
+                    docker-compose version
+                    curl --version
+                '''
+            }
+        }
+        stage("Prune Docker Data") {
+            steps {
+                bat 'docker system prune -a --volumes -f'
+            }
+        }
+        stage("Start Container") {
+            steps {
+                bat 'docker-compose up -d --no-color --wait'
+                bat 'docker-compose ps'
+            }
+        }
+        stage("Check Response") {
+            steps {
+                bat 'curl http://localhost'
+            }
+        }
+    }
 }
